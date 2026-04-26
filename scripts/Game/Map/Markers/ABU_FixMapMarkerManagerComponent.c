@@ -2,12 +2,21 @@ modded class SCR_MapMarkerManagerComponent
 {
 	override void Update(float timeSlice)
 	{
+		if (!m_MapEntity)
+			return;
+
 		m_MapEntity.GetMapVisibleFrame(m_vVisibleFrameMin, m_vVisibleFrameMax);
 
 		for (int i = m_aStaticMarkers.Count() - 1; i >= 0; i--)
 		{
 			SCR_MapMarkerBase marker = m_aStaticMarkers[i];
-			if (!marker || !marker.GetRootWidget())
+			if (!marker)
+			{
+				m_aStaticMarkers.Remove(i);
+				continue;
+			}
+
+			if (!marker.GetRootWidget())
 			{
 				SetStaticMarkerDisabled(marker, true);
 				continue;
