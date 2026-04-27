@@ -5,13 +5,7 @@ modded class SCR_EditorManagerEntity
 	override SCR_EditorModeEntity CreateEditorMode(EEditorMode mode, bool isInit, ResourceName prefab = "")
 	{
 		if (m_bABU_IsCreatingMode)
-		{
-			SCR_EditorModeEntity existingMode = FindModeEntity(mode);
-			if (existingMode)
-				return existingMode;
-
 			return null;
-		}
 
 		m_bABU_IsCreatingMode = true;
 		SCR_EditorModeEntity result = super.CreateEditorMode(mode, isInit, prefab);
