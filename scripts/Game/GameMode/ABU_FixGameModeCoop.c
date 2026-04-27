@@ -15,7 +15,8 @@ modded class PS_GameModeCoop
 			m_OnPlayerDisconnected.Invoke(playerId, cause, timeout);
 			foreach (SCR_BaseGameModeComponent comp : m_aAdditionalGamemodeComponents)
 			{
-				if (comp) comp.OnPlayerDisconnected(playerId, cause, timeout);
+				if (comp)
+					comp.OnPlayerDisconnected(playerId, cause, timeout);
 			}
 			m_OnPostCompPlayerDisconnected.Invoke(playerId, cause, timeout);
 			if (IsMaster() && m_pRespawnSystemComponent)
