@@ -19,7 +19,11 @@ modded class PS_MissionDataManager
 			if (!instigatorEntity)
 				return;
 
-			GetGame().GetCallqueue().Call(SaveDamageEvent, playerId, rplId, damageContext.damageValue);
+			vector instigatorOrigin = instigatorEntity.GetOrigin();
+			vector targetOrigin = target.GetOrigin();
+			float distance = vector.Distance(instigatorOrigin, targetOrigin);
+
+			GetGame().GetCallqueue().Call(SaveDamageEventWithDistance, playerId, rplId, damageContext.damageValue, distance);
 		}
 	}
 }
