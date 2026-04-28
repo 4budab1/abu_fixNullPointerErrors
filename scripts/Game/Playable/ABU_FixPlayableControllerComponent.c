@@ -57,4 +57,21 @@ modded class PS_PlayableControllerComponent
 			}
 		}
 	}
+
+	[RplRpc(RplChannel.Reliable, RplRcver.Server)]
+	override void RPC_MoveVoNToRoom(int playerId, FactionKey factionKey, string roomName)
+	{
+		if (playerId <= 0)
+			return;
+
+		PS_PlayableManager playableManager = PS_PlayableManager.GetInstance();
+		if (!playableManager)
+			return;
+
+		PS_VoNRoomsManager VoNRoomsManager = PS_VoNRoomsManager.GetInstance();
+		if (!VoNRoomsManager)
+			return;
+
+		VoNRoomsManager.MoveToRoom(playerId, factionKey, roomName);
+	}
 }
