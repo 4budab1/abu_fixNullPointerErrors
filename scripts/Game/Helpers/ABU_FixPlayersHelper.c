@@ -1,12 +1,13 @@
-class ABU_PlayersHelper
+modded class PS_PlayersHelper
 {
-	static bool IsAdminOrServer()
+	override static bool IsAdminOrServer()
 	{
 		if (Replication.IsServer())
 			return true;
-		PlayerController playerController = GetGame().GetPlayerController();
-		if (!playerController)
+
+		if (!SCR_Global.IsAdmin())
 			return false;
-		return SCR_Global.IsAdmin(playerController.GetPlayerId());
+
+		return true;
 	}
 }
