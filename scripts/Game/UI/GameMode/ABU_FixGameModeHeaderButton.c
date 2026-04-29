@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
 modded class PS_GameModeHeaderButton
+=======
+modded class PS_GameModeHeaderButton : SCR_ButtonBaseComponent
+>>>>>>> Stashed changes
 {
 	override void Update()
 	{
@@ -21,11 +25,17 @@ modded class PS_GameModeHeaderButton
 		PlayerController playerController = GetGame().GetPlayerController();
 		if (!playerController)
 			return;
+<<<<<<< Updated upstream
 
 		PS_PlayableControllerComponent playableController = PS_PlayableControllerComponent.Cast(playerController.FindComponent(PS_PlayableControllerComponent));
 		if (!playableController)
 			return;
 
+=======
+		PS_PlayableControllerComponent playableController = PS_PlayableControllerComponent.Cast(playerController.FindComponent(PS_PlayableControllerComponent));
+		if (!playableController)
+			return;
+>>>>>>> Stashed changes
 		bool toggle = m_eState == playableController.GetMenuState();
 		if (IsToggled() != toggle) SetToggled(toggle);
 	}

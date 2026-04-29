@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 modded class SCR_DataCollectorComponent
 {
 	override protected void OnGameModeEnd(SCR_GameModeEndData data)
@@ -73,5 +74,15 @@ modded class SCR_DataCollectorComponent
 			if (winFaction)
 				dataEvent.name_winner_faction = winFaction.GetFactionKey();
 		}
+=======
+modded class SCR_DataCollectorComponent : SCR_BaseGameModeComponent
+{
+	override protected void OnGameModeEnd(SCR_GameModeEndData data)
+	{
+		if (!m_SessionData)
+			return;
+
+		super.OnGameModeEnd(data);
+>>>>>>> Stashed changes
 	}
 }
