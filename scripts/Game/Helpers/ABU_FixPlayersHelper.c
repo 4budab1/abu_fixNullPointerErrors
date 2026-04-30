@@ -1,6 +1,6 @@
-class ABU_PlayersHelper
+modded class PS_PlayersHelper
 {
-	static bool IsAdminOrServer()
+	override static bool IsAdminOrServer()
 	{
 		if (Replication.IsServer())
 			return true;

@@ -14,7 +14,7 @@ modded class PS_PlayableControllerComponent
 			return;
 		}
 
-		if (ABU_PlayersHelper.IsAdminOrServer())
+		if (PS_PlayersHelper.IsAdminOrServer())
 			return;
 
 		PlayerController playerController = PlayerController.Cast(owner);
