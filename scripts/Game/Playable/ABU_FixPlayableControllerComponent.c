@@ -1,5 +1,113 @@
 modded class PS_PlayableControllerComponent
 {
+	override PS_LobbyVoNComponent GetVoN()
+	{
+		PlayerController thisPlayerController = PlayerController.Cast(GetOwner());
+		if (!thisPlayerController)
+			return null;
+		IEntity entity = thisPlayerController.GetControlledEntity();
+		if (!entity)
+			return null;
+		return PS_LobbyVoNComponent.Cast(entity.FindComponent(PS_LobbyVoNComponent));
+	}
+
+	override RadioTransceiver GetVoNTransiver(int radioId)
+	{
+		PlayerController thisPlayerController = PlayerController.Cast(GetOwner());
+		if (!thisPlayerController)
+			return null;
+		IEntity entity = thisPlayerController.GetControlledEntity();
+		if (!entity)
+			return null;
+		SCR_GadgetManagerComponent gadgetManager = SCR_GadgetManagerComponent.Cast(entity.FindComponent(SCR_GadgetManagerComponent));
+		if (!gadgetManager)
+			return null;
+		array<SCR_GadgetComponent> radios = gadgetManager.GetGadgetsByType(EGadgetType.RADIO);
+		if (!radios || radios.Count() <= radioId)
+			return null;
+		IEntity radioEntity = radios[radioId].GetOwner();
+		if (!radioEntity)
+			return null;
+		BaseRadioComponent radio = BaseRadioComponent.Cast(radioEntity.FindComponent(BaseRadioComponent));
+		if (!radio)
+			return null;
+		radio.SetPower(true);
+		RadioTransceiver transiver = RadioTransceiver.Cast(radio.GetTransceiver(0));
+		if (!transiver)
+			return null;
+		transiver.SetFrequency(radioId + 1);
+		return transiver;
+	}
+
+	override void LobbyVoNEnable()
+	{
+		UpdatePosition(true);
+		GetGame().GetCallqueue().Remove(LobbyVoNDisableDelayed);
+		PS_LobbyVoNComponent von = GetVoN();
+		if (!von)
+			return;
+		RadioTransceiver transiver = GetVoNTransiver(1);
+		if (!transiver)
+			return;
+		von.SetTransmitRadio(transiver);
+		von.SetCommMethod(ECommMethod.SQUAD_RADIO);
+		von.SetCapture(true);
+	}
+
+	override void LobbyVoNRadioEnable()
+	{
+		UpdatePosition(true);
+		GetGame().GetCallqueue().Remove(LobbyVoNDisableDelayed);
+		PS_LobbyVoNComponent von = GetVoN();
+		if (!von)
+			return;
+		RadioTransceiver transiver = GetVoNTransiver(0);
+		if (!transiver)
+			return;
+		von.SetTransmitRadio(transiver);
+		von.SetCommMethod(ECommMethod.SQUAD_RADIO);
+		von.SetCapture(true);
+	}
+
+	override void SetVoNKey(string VoNKey, string VoNKeyLocal)
+	{
+		if (!GetVoN())
+			return;
+		PlayerController thisPlayerController = PlayerController.Cast(GetOwner());
+		if (!thisPlayerController)
+			return;
+		IEntity entity = thisPlayerController.GetControlledEntity();
+		if (!entity)
+			return;
+		SCR_GadgetManagerComponent gadgetManager = SCR_GadgetManagerComponent.Cast(entity.FindComponent(SCR_GadgetManagerComponent));
+		if (!gadgetManager)
+			return;
+		array<SCR_GadgetComponent> radios = gadgetManager.GetGadgetsByType(EGadgetType.RADIO);
+		if (!radios || radios.Count() < 2)
+			return;
+		BaseRadioComponent radio = BaseRadioComponent.Cast(radios[0].GetOwner().FindComponent(BaseRadioComponent));
+		if (radio)
+			radio.SetEncryptionKey(VoNKey);
+		radio = BaseRadioComponent.Cast(radios[1].GetOwner().FindComponent(BaseRadioComponent));
+		if (radio)
+			radio.SetEncryptionKey(VoNKeyLocal);
+	}
+
+	override bool isVonInit()
+	{
+		PlayerController thisPlayerController = PlayerController.Cast(GetOwner());
+		if (!thisPlayerController)
+			return false;
+		IEntity entity = thisPlayerController.GetControlledEntity();
+		if (!entity)
+			return false;
+		SCR_GadgetManagerComponent gadgetManager = SCR_GadgetManagerComponent.Cast(entity.FindComponent(SCR_GadgetManagerComponent));
+		if (!gadgetManager)
+			return false;
+		IEntity radioEntity = gadgetManager.GetGadgetByType(EGadgetType.RADIO);
+		return radioEntity != null;
+	}
+
 	override protected void EOnFrame(IEntity owner, float timeSlice)
 	{
 		PS_GameModeCoop gameMode = PS_GameModeCoop.Cast(GetGame().GetGameMode());

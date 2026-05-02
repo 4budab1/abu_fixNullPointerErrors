@@ -1,5 +1,13 @@
 modded class PS_PlayableManager
 {
+	override void SetPlayerState(int playerId, PS_EPlayableControllerState state)
+	{
+		PS_GameModeCoop gameModeCoop = PS_GameModeCoop.Cast(GetGame().GetGameMode());
+		if (!gameModeCoop)
+			return;
+		super.SetPlayerState(playerId, state);
+	}
+
 	override void ApplyPlayable(int playerId)
 	{
 		SCR_PlayerController playerController = SCR_PlayerController.Cast(m_PlayerManager.GetPlayerController(playerId));

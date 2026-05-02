@@ -1,6 +1,7 @@
 modded class SCR_EditorManagerEntity
 {
 	protected bool m_bABU_IsCreatingMode = false;
+	protected bool m_bABU_IsUpdatingLimited = false;
 
 	override SCR_EditorModeEntity CreateEditorMode(EEditorMode mode, bool isInit, ResourceName prefab = "")
 	{
@@ -27,5 +28,15 @@ modded class SCR_EditorManagerEntity
 		}
 
 		return result;
+	}
+
+	override protected void UpdateLimited()
+	{
+		if (m_bABU_IsUpdatingLimited)
+			return;
+
+		m_bABU_IsUpdatingLimited = true;
+		super.UpdateLimited();
+		m_bABU_IsUpdatingLimited = false;
 	}
 }

@@ -4,10 +4,9 @@ modded class PS_PlayersHelper
 	{
 		if (Replication.IsServer())
 			return true;
-
-		if (!SCR_Global.IsAdmin())
+		PlayerController playerController = GetGame().GetPlayerController();
+		if (!playerController)
 			return false;
-
-		return true;
+		return SCR_Global.IsAdmin(playerController.GetPlayerId());
 	}
 }

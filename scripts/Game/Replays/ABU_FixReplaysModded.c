@@ -1,3 +1,13 @@
+modded class PS_ReplayWriter
+{
+	override void WriteEntityMove(RplId characteRplId, IEntity character)
+	{
+		if (!character)
+			return;
+		super.WriteEntityMove(characteRplId, character);
+	}
+}
+
 modded class SCR_EditableVehicleComponent
 {
 	override void RegisterToReplay(IEntity owner)
@@ -38,6 +48,17 @@ modded class SCR_EditableVehicleComponent
 
 		GetGame().GetCallqueue().CallLater(PositionLogger, 100, false, rplId, owner);
 	}
+
+	override protected void PositionLogger(RplId rplId, IEntity owner)
+	{
+		if (!owner || owner.IsDeleted())
+			return;
+		PS_ReplayWriter replayWriter = PS_ReplayWriter.GetInstance();
+		if (!replayWriter)
+			return;
+		replayWriter.WriteEntityMove(rplId, owner);
+		GetGame().GetCallqueue().CallLater(PositionLogger, 500, false, rplId, owner);
+	}
 }
 
 modded class SCR_ChimeraCharacter
@@ -63,5 +84,16 @@ modded class SCR_ChimeraCharacter
 		damageEvent.Insert(DieLogger);
 		replayWriter.WriteCharacterRegistration(rpl.Id(), this);
 		GetGame().GetCallqueue().CallLater(PositionLogger, 0, false, rpl.Id());
+	}
+
+	override protected void PositionLogger(RplId rplId)
+	{
+		if (IsDeleted())
+			return;
+		PS_ReplayWriter replayWriter = PS_ReplayWriter.GetInstance();
+		if (!replayWriter)
+			return;
+		replayWriter.WriteEntityMove(rplId, this);
+		GetGame().GetCallqueue().CallLater(PositionLogger, 500, false, rplId);
 	}
 }

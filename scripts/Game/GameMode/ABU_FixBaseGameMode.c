@@ -15,10 +15,13 @@ modded class SCR_BaseGameMode
 
 	protected override void OnPlayerRoleChange(int playerId, EPlayerRole roleFlags)
 	{
-		super.OnPlayerRoleChange(playerId, roleFlags);
 		if (m_bABU_OnPlayerRoleChangeActive)
+		{
+			super.OnPlayerRoleChange(playerId, roleFlags);
 			return;
+		}
 		m_bABU_OnPlayerRoleChangeActive = true;
+		super.OnPlayerRoleChange(playerId, roleFlags);
 		m_OnPlayerRoleChange.Invoke(playerId, roleFlags);
 		m_bABU_OnPlayerRoleChangeActive = false;
 	}
